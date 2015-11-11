@@ -10,3 +10,6 @@ the intersection computation can be used first for one segment parameter, t, and
 two segments) for the second segment parameter, u. The two segments intersect, the, when 0 <= t <= 1
 and 0 <= u <= 1, otherwise not.
 
+See http://haskellformac.com/ for details on Framework. Note that this exercise contains an illustration that
+depends on Hakell for Mac, however, the underlying Haskell code can be easily seperated and used in other
+graphics frameworks (e.g. gloss - https://hackage.haskell.org/package/gloss).
