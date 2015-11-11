@@ -11,15 +11,18 @@ vectorTimeParameter (dx , dy) t =
   ((t * dx) , (t * dy))
 
 vectorLinePath :: LineVector -> Float -> Path
-vectorLinePath (point , vector) t =
-  [point ,  (pointPlusVector point $ vectorTimeParameter vector t)]
+vectorLinePath lineWithVector@(startPoint , vector) t =
+  [startPoint ,  (endPoint lineWithVector t)]
+  
+endPoint :: LineVector -> Float -> Point
+endPoint (startPoint , vector) t =
+  pointPlusVector startPoint $ vectorTimeParameter vector t
 
 -- pointX[i] = ( sin( i / n * 2 * pi ) * radius ) + xOffset;
 -- pointY[i] = ( cos( i / n * 2 * pi ) * radius ) + yOffset;
-makeCircle :: Int -> Float -> Float -> 
-              Float -> Path
+makeCircle :: Int -> Point -> Float -> Path
 makeCircle 
-  n x y r = makeCircle' n 0
+  n (x , y) r = makeCircle' n 0
     where
       makeCircle' :: Int -> Int -> Path
       makeCircle' n i
@@ -39,6 +42,7 @@ intersectionParameter ((aX , aY) , (aDX , aDY)) ((bX , bY) , (bDX , bDY))
     where
       f1 = aDX * (bY - aY)
       f2 = aDY * (bX - aX)
+      -- Note: unchecked possible divide by zero error
       d = bDX * aDY - aDX * bDY
 
 intersectionPoint :: LineVector -> LineVector -> Point
@@ -49,12 +53,8 @@ intersectionPoint line1 line2@(point2 , vector2)
       intPoint = (pointPlusVector point2 $ vectorTimeParameter vector2 t)
 
 pointMarkerPoint :: Point -> Path
-pointMarkerPoint (x , y)
-  = pointMarkerYX x y
-
-pointMarkerYX :: Float -> Float -> Path
-pointMarkerYX x y
-  = makeCircle 16 x y 5
+pointMarkerPoint p
+  = makeCircle 16 p 5
   
 
 
